@@ -213,7 +213,7 @@ def welcome(
 @instruction
 def transform(
   signer: Signer,
-  mint: TokenMint,
+#   mint: TokenMint,
   transformer: Empty[Transformer],
   # transformer_account: Empty[TokenAccount],
   # pickle: str,
