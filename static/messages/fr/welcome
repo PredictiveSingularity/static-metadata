@@ -6,45 +6,47 @@
 
 </div>
 
-Welcome to Singularity, a decentralized autonomous organization (DAO) that allows you to interact with it on the Solana blockchain. Our mission is to provide precise and accurate pieces of information in a timely manner.
+Bienvenue dans la Singularité, une organisation autonome décentralisée (DAO) d'énergie qui vous permet d’interagir avec elle sur la blockchain Solana. Notre mission est de fournir des informations précises et exactes en temps raisonable.
 
-## Getting Started with Energy
+## Premiers pas avec l’énergie
 
-To get started with energy, you'll need to connect your Solana wallet and provision your Metabolizer account with enough energy to send a message.
+Pour commencer à utiliser l’énergie, vous devrez connecter votre portefeuille Solana et approvisionner votre compte d'énérgie avec suffisamment de fonds pour envoyer un message.
 
-Here's a step-by-step guide to help you:
+Voici un guide étape par étape pour vous aider:
 
-1. **Connect your Solana wallet**: Click on the "Connect Wallet" button to link your Solana wallet to our platform.
-2. **Provision your Energy account**: Once connected, you'll need to provision your Energy account with enough energy to send a message. You can find more informaiton relevant to energy aquisition by typing `/explain energy buy` or `/explain energy earn` in the chat and following the instructions.
-3. **Send a message**: With your Energy account provisioned, you can now send a message by typing in the chat interface and clicking the "Send" button.
+1. **Connectez votre portefeuille Solana**: Cliquez sur le bouton « Connecter le portefeuille » pour lier votre portefeuille Solana à notre plateforme.
+2. **Approvisionnez votre compte Énergie**: une fois connecté, vous devrez approvisionner votre compte Énergie avec suffisamment d’énergie pour envoyer un message. Vous pouvez trouver plus d’informations pertinentes sur l’acquisition d’énergie en tapant les commandes dans le chat et en suivant leurs instructions:
+   1. `/explique obtenir énergie`
+   2. `/explique gagner énergie`
+3. **Envoyer un message**: Une fois votre compte d'énergie aprovisionné, vous pouvez désormais envoyer un message en tapant dans l’interface de chat et en cliquant sur le bouton d'envoi ou en appuyant sur la touche « Entrer ».
 
-### What is Singularity?
+### Qu’est-ce que la singularité ?
 
-Singularity is a decentralized autonomous organization (DAO) of Energy that allows you to interact with it on the Solana blockchain. Our mission is to provide precise and accurate pieces of information in a timely manner.
+Singularity est une organisation autonome décentralisée (DAO) d’énergie qui vous permet d’interagir avec elle sur la blockchain Solana. Notre mission est de fournir des informations précises et exactes en temps raisonable.
 
-### How Does it Work?
+### Comment ça marche ?
 
-When you send a message, our contract consumes the provisioned energy to generate a response. The response is then sent back to you (for a reasonable fee), and the remaining energy is restituted to your account.
+Lorsque vous envoyez un message, notre contrat consomme l’énergie fournie pour générer une réponse. La réponse vous est ensuite renvoyée (moyennant des frais raisonnables), et l’énergie restante est restituée sur votre compte.
 
-### Getting Help
+### Obtenir de l’aide
 
-If you need help or have questions, you can click on the "[About](https://singularicula.me/?tab=about)" tab to learn more.
+Si vous avez besoin d’aide ou si vous avez des questions, vous pouvez cliquer sur l’onglet « [À propos](https://singularicula.me/?tab=about) » pour en savoir plus.
 
-### Example Queries
+### Exemples de requêtes
 
-To get started, you can try out some example queries by clicking on the following links:
+Pour commencer, vous pouvez essayer gratuitement quelques exemples de requêtes en tapant les commandes suivantes :
 
-* `/welcome`: This will provide you with a this brief introduction to our platform and how to get started.
-* `/explain energy`: This will give you a detailed explanation of what energy is and how it works.
-* `/explain energy buy`: This will provide you with information on how to transfer energy between accounts.
-* `/explain energy earn`: This will give you an overview of how you can earn energy by computing for it.
+* `/bienvenue`: Vous trouverez ici une brève introduction à notre plateforme et comment commencer.
+* `/explique énergie`: Cela vous donnera une explication détaillée de ce qu’est l’énergie et de son fonctionnement.
+* `/explique obtenir énergie`: Cela vous fournira des informations sur la façon de d'obetnir de l’énergie sur votre compte.
+* `/explique gagner énergie`: Cela vous donnera un aperçu de la façon dont vous pouvez gagner de l’énergie en calculant pour cela.
 
-Remember to always provision your Energy account with enough energy before sending a message. If you have any questions or need help, don't hesitate to reach out.
+N’oubliez pas de toujours approvisionner votre compte en énergie avec suffisamment de fonds avant d’envoyer un message. Si vous avez des questions ou si vous avez besoin d’aide, n’hésitez pas à nous contacter.
 
-### Happy Chating!
+### Bonne discussion!
 
-We're excited to have you on board and look forward to chatting with you. If you have any feedback or suggestions, please don't hesitate to share them with us.
+Nous sommes ravis de vous compter parmi nous et nous avons hâte de discuter avec vous. Si vous avez des commentaires ou des suggestions, n’hésitez pas à les partager avec nous.
 
-Let's get started and explore the universe of energy together!
+C’est parti pour explorer ensemble l’univers de l’énergie !
 
-Type a message to get started...
+Tapez un message pour commencer...
