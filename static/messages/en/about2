@@ -1,20 +1,11 @@
 ## Paper
 
-<iframe
-	src="https://cdn-lfs.hf.co/repos/78/e4/78e472ecfc9fc5b040e888da0441ebcef0c3597bda965fcf20626e04025e136c/18687071fb6510a2ecc6621262021229c061f8f27933c5df52f49e17cabe5500?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27Singularity.pdf%3B+filename%3D%22Singularity.pdf%22%3B&response-content-type=application%2Fpdf&Expires=1739123788&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTczOTEyMzc4OH19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy5oZi5jby9yZXBvcy83OC9lNC83OGU0NzJlY2ZjOWZjNWIwNDBlODg4ZGEwNDQxZWJjZWYwYzM1OTdiZGE5NjVmY2YyMDYyNmUwNDAyNWUxMzZjLzE4Njg3MDcxZmI2NTEwYTJlY2M2NjIxMjYyMDIxMjI5YzA2MWY4ZjI3OTMzYzVkZjUyZjQ5ZTE3Y2FiZTU1MDA%7EcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj0qJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT0qIn1dfQ__&Signature=Lu1BNa18%7Esb3xmLGx-lgY8rO6F1VBmHZb2bn4m5WFBZXaYJzi6A6xZ3GcRtnSXWOZGeGR1TuQpvnrB-JWneXFGfmVBpMzrt3OEuPkidHgIr6XzedtW1sXdHxBtFAhuZkAG764002aov6TuIbJUonICI-isIdoZrBHg8AY9mEQ-tp9%7EC70wXmMh5Xg4HRjb73wfFgbt7%7EFf5xxi4k3JMq%7El9mU0YDLge3bvGhe1IIL12SvuuKMbh1z2WmvVF53zjFv1Mplp8CBOrVpSeh%7EEP4fNOqLrHlanlja%7EUULvl6ddD7bC%7Es28H4eBwtNnbGOv3owAsZr7nxVjWX2is7JR6TlQ__&Key-Pair-Id=K3RPWS32NSSJCE" type="application/pdf"
-	frameborder="0"
-	width="850"
-	height="450"
-></iframe>
+Our paper is available [here](https://github.com/PredictiveSingularity/DAOE/blob/master/PAPER.pdf).
 
-## Contract
+## Source code
 
-```python
-# Will be available here soon
-```
-
-Checkout the [source code](https://github.com/PredictiveSingularity/DAOE/blob/master/energy.py).
+Checkout us out [on GitHub](https://github.com/PredictiveSingularity).
 
 ## Contact
 
-You can reach us by using the `@Singularis /issue` command in the chat.
+You can reach us by using the `/contact` command in the chat.
