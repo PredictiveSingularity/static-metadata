@@ -14,7 +14,7 @@ At the end of the process, the rest of the ⚡ energy in provision that was not 
 
 ##### Connecting
 
-We you connect your wallet for the first time, we'll ask you to create an account to hold ⚡ energy.
+When you connect your wallet for the first time, we'll ask you to create an account to hold ⚡ energy.
 
 ```python
 @instruction
