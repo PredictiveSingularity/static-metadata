@@ -93,20 +93,45 @@ async function checkAccount() {
 
 // Check if Phantom is installed
 function getProvider() {
-    if ('solana' in window) {
-        // console.log("Solana wallet found");
+    if (window.solflare) {
+        const provider = window.solflare;
+        return provider;
+        // Connect to Solflare
+        // return solflare.connect().then(() => {
+        //     console.log('Connected to Solflare');
+        //     // return solflare;
+        //     const publicKey = solflare.publicKey;
+        //     console.log("Public Key: ", publicKey.toBase58());
+        //     return publicKey;
+        // }).catch((err) => {
+        //     console.error('Connection to Solflare failed:', err);
+        //     const publicKey = null;
+        //     return publicKey;
+        // });
+    } else if ('solana' in window) {
         const provider = window.solana;
         if (provider.isPhantom) {
-            // console.log("Phantom wallet found");
+            // console.log('Connected to Phantom');
             return provider;
+            // return provider.connect().then(() => {
+            //     const publicKey = resp.publicKey;
+            //     return publicKey;
+            // }).catch((err) => {
+            //     console.error('Connection to Phantom failed:', err);
+
+            // });
         } else {
-            alert('Sorry! We know you have a Solana wallet, but we currently only support Phantom wallet. Please install it.');
-            window.open("https://phantom.app/", target="_blank");
+            alert('Sorry! We know you have a Solana wallet, but we currently only support Phantom and Solflare wallets. Please install one of them.');
+            window.open("https://phantom.app/", "_blank");
+            const provider = null;
         }
+        return provider;
     } else {
-        alert('Phantom wallet not found. Please install it.');
-        window.open("https://phantom.app/", target="_blank");
+        alert('Solana wallet not found. Please install Phantom or Solflare wallet.');
+        window.open("https://phantom.app/", "_blank");
+        const provider = null;
     }
+    return provider;
 }
 
 
@@ -148,7 +173,7 @@ async function connectWallet() {
         try {
             console.log("Connecting to wallet...");
             const resp = await provider.connect();
-            const publicKey = resp.publicKey;
+            const publicKey = resp.publicKey || provider.publicKey;
             pubKey = document.querySelector("#wallet-address > label > div > textarea")
             pubKey.value = publicKey.toBase58();
             pubKey.dispatchEvent(new Event('input'));
@@ -281,6 +306,9 @@ async function connectWallet() {
         } catch (err) {
             console.error("Connection failed:", err);
         }
+    } else {
+        console.error("Provider not found.");
+        console.log(provider);
     }
 }
 

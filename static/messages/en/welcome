@@ -15,7 +15,7 @@ To get started with energy, you'll need to connect your Solana wallet and provis
 Here's a step-by-step guide to help you:
 
 1. **Connect your Solana wallet**: Click on the "Connect Wallet" button to link your Solana wallet to our platform.
-2. **Provision your Energy account**: Once connected, you'll need to provision your Energy account with enough energy to send a message. You can find more informaiton relevant to energy aquisition by typing `/explain energy buy` or `/explain energy earn` in the chat and following the instructions.
+2. **Provision your Energy account**: Once connected, you'll need to provision your Energy account with enough energy to send a message. You can find more informaiton relevant by typing `/help send message` in the chat and following the instructions.
 3. **Send a message**: With your Energy account provisioned, you can now send a message by typing in the chat interface and clicking the "Send" button.
 
 ### What is Singularity?
