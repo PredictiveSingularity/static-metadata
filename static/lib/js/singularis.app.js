@@ -167,7 +167,7 @@ async function computeInstructionDiscriminator(instructionName) {
 // Connect wallet
 async function connectWallet() {
     console.log("Accessing provider...");
-    provider = getProvider();
+    const provider = getProvider();
     if (provider) {
         console.log("Found provider.");
         try {
@@ -275,7 +275,8 @@ async function connectWallet() {
                             console.log("Latest blockhash: ", latest);
                             transaction.recentBlockhash = latest.blockhash;
                             transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
-                            transaction.feePayer = publicKey;
+                            transaction.feePayer = provider.publicKey;
+                            // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
                             console.log("Transaction: ", transaction);
                             provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
                                 console.log(`Welcome: Transaction sent with signature: ${JSON.stringify(signature)}`);
@@ -394,7 +395,7 @@ function transform() {
                     try {
                         console.log("Connecting to wallet...");
                         const resp = await provider.connect();
-                        const publicKey = resp.publicKey;
+                        const publicKey = resp.publicKey  || provider.publicKey;
                         const transaction = new solanaWeb3.Transaction({
                             feePayer: publicKey,
                         });
@@ -452,9 +453,16 @@ function transform() {
                             console.log("Latest blockhash: ", latest);
                             transaction.recentBlockhash = latest.blockhash;
                             transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
-                            transaction.feePayer = publicKey;
+                            transaction.feePayer = provider.publicKey;
+                            // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
+                            // transaction.programId = programId;
                             console.log("Transaction: ", transaction);
-                            provider.signAndSendTransaction(transaction, { skipPreflight: true }).then((signature) => {
+                            // if (!transaction.feePayer || !transaction.recentBlockhash || !transaction.lastValidBlockHeight) {
+                            //     console.error("Transaction properties are missing");
+                            //     alert("Transaction properties are missing");
+                            //     return;
+                            // }
+                            provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
                                 console.log(`Transform: Transaction sent with signature: ${JSON.stringify(signature)}`);
                             }).catch((error) => {
                                 console.error("Error sending transaction: ", error);
@@ -498,7 +506,7 @@ async function checkMetabolizerAndProvisionEnergy() {
             try {
                 console.log("Connecting to wallet...");
                 const resp = await provider.connect();
-                const publicKey = resp.publicKey;
+                const publicKey = resp.publicKey || provider.publicKey;
                 transaction = new solanaWeb3.Transaction({
                     feePayer: publicKey,
                 });
@@ -521,16 +529,23 @@ async function checkMetabolizerAndProvisionEnergy() {
                     metabolizeData = metabolizeDiscriminator;
                     instruction = new solanaWeb3.TransactionInstruction({
                         keys: accounts,
-                        programId,
+                        programId: programId,
                         data: metabolizeData,
                     });
                     transaction.add(instruction);
-                    connection.getLatestBlockhash().then((latest) => {
+                    connection.getLatestBlockhash().then(async (latest) => {
                         console.log("Latest blockhash: ", latest);
                         transaction.recentBlockhash = latest.blockhash;
                         transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
-                        transaction.feePayer = publicKey;
+                        transaction.feePayer = provider.publicKey;
+                        // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
                         console.log("Transaction: ", transaction);
+                        // if (!transaction.feePayer || !transaction.recentBlockhash || !transaction.lastValidBlockHeight) {
+                        //     console.error("Transaction properties are missing");
+                        //     alert("Transaction properties are missing");
+                        //     console.log(transaction.feePayer, transaction.recentBlockhash, transaction.lastValidBlockHeight);
+                        //     return;
+                        // }
                         provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
                             console.log(`Metabolize: Transaction sent with signature: ${JSON.stringify(signature)}`);
                             accountChecked = true;
@@ -538,6 +553,10 @@ async function checkMetabolizerAndProvisionEnergy() {
                             console.error("Error sending transaction: ", error);
                             alert("Error sending transaction: ", error);
                         });
+                        // const signedTransaction = await provider.signTransaction(transaction);
+                        // const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+                        // await connection.confirmTransaction(signature);
+                        // console.log(`Metabolize: Transaction sent with signature: ${JSON.stringify(signature)}`);
                     }).catch((error) => {
                         console.error("Error getting latest blockhash: ", error);
                         alert("Error getting latest blockhash: ", error);
@@ -552,7 +571,7 @@ async function checkMetabolizerAndProvisionEnergy() {
                     // Make the provision
                     // provisionEnergy();
                     console.log("Provisioning energy...");
-                    transaction = new solanaWeb3.Transaction({
+                    const tx = new solanaWeb3.Transaction({
                         feePayer: publicKey,
                     });
                     const energy_addres = document.querySelector("#energy-address > label > div > textarea").value;
@@ -584,6 +603,7 @@ async function checkMetabolizerAndProvisionEnergy() {
                                         { pubkey: publicKey, isSigner: true, isWritable: true },
                                         { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
                                     ];
+                                    console.log("Accounts: ", accounts);
                                     // Compute the 8-byte discriminator for "provision"
                                     const provisionEnergyDiscriminator = await computeInstructionDiscriminator("provision");
                                     console.log("8-byte instruction discriminator:", provisionEnergyDiscriminator);
@@ -592,22 +612,33 @@ async function checkMetabolizerAndProvisionEnergy() {
                                     provisionEnergyData = new Uint8Array([...provisionEnergyDiscriminator, ...nU64]);
                                     instruction = new solanaWeb3.TransactionInstruction({
                                         keys: accounts,
-                                        programId,
+                                        programId: programId,
                                         data: provisionEnergyData,
                                     });
-                                    transaction.add(instruction);
-                                    connection.getLatestBlockhash().then((latest) => {
+                                    tx.add(instruction);
+                                    connection.getLatestBlockhash().then(async (latest) => {
                                         console.log("Latest blockhash: ", latest);
-                                        transaction.recentBlockhash = latest.blockhash;
-                                        transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
-                                        transaction.feePayer = publicKey;
-                                        console.log("Transaction: ", transaction);
-                                        provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
+                                        tx.recentBlockhash = latest.blockhash;
+                                        tx.lastValidBlockHeight = latest.lastValidBlockHeight;
+                                        tx.feePayer = provider.publicKey;
+                                        // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
+                                        console.log("Transaction: ", tx);
+                                        // if (!transaction.feePayer || !transaction.recentBlockhash || !transaction.lastValidBlockHeight) {
+                                        //     console.error("Transaction properties are missing");
+                                        //     alert("Transaction properties are missing");
+                                        //     console.log(transaction.feePayer, transaction.recentBlockhash, transaction.lastValidBlockHeight);
+                                        //     return;
+                                        // }
+                                        provider.signAndSendTransaction(tx, { skipPreflight: false }).then((signature) => {
                                             console.log(`Provision: Transaction sent with signature: ${JSON.stringify(signature)}`);
                                         }).catch((error) => {
                                             console.error("Error sending transaction: ", error);
                                             alert("Error sending transaction: ", error);
                                         });
+                                        // const signedTransaction = await provider.signTransaction(tx);
+                                        // const signature = await connection.sendRawTransaction(signedTransaction.serialize());                
+                                        // await connection.confirmTransaction(signature);
+                                        // console.log(`Provision: Transaction sent with signature: ${JSON.stringify(signature)}`);
                                     }).catch((error) => {
                                         console.error("Error getting latest blockhash: ", error);
                                         alert("Error getting latest blockhash: ", error);
