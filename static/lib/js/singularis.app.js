@@ -53,45 +53,7 @@ async function findTokenAccountAddress(mintPublicKey, ownerPublicKey) {
     return tokenAccountAddress;
 }
 
-async function checkAccount() {
-    if ('solana' in window) {
-        const provider = window.solana;
-        if (provider.isPhantom) {
-            try {
-                const publicKey = provider.publicKey;
-                // Get energy mint address
-                const energyMint = document.querySelector("#energy-mint > label > div > textarea").value;
-                console.log("Energy Mint Address: ", energyMint);
-                // Find the singularis program ID
-                const energyAccountValue = await findTokenAccountAddress(new solanaWeb3.PublicKey(energyMint), publicKey);
-                console.log("Energy Account Address: ", energyAccountValue);
-                // check energy account address by computing it direcly from seed
-                if (energyAccountValue!== "1e") {
-                    // Check if TokenAccount exists
-                    const networkDropdown = document.querySelector("#network > div.container > div > div.wrap-inner > div > input");
-                    const network = networkDropdown.value;
-                    const connection = new solanaWeb3.Connection(network);
-                    connection.getParsedAccountInfo(new solanaWeb3.PublicKey(energyAccountValue)).then((accountInfo) => {
-                        console.log("Account Info: ", accountInfo);
-                        console.log("Account Info Data: ", accountInfo.value);
-                        if (!accountInfo ||!accountInfo.value) {
-                            // TokenAccount doesn't exist, trigger welcome instruction
-                            console.log("TokenAccount doesn't exist, triggering welcome instruction");
-                        } else {
-                            // TokenAccount exists, trigger check balance instruction
-                            console.log("TokenAccount exists, triggering check balance instruction");
-                            console.log("Account Balance: ", accountInfo.value.data.info.tokenAmount.amount * 1e-6);
-                        }
-                    });
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        }
-    }
-}
-
-// Check if Phantom is installed
+// Check if wallet is installed
 function getProvider() {
     if (window.solflare) {
         const provider = window.solflare;
@@ -123,15 +85,13 @@ function getProvider() {
         } else {
             alert('Sorry! We know you have a Solana wallet, but we currently only support Phantom and Solflare wallets. Please install one of them.');
             window.open("https://phantom.app/", "_blank");
-            const provider = null;
+            return null;
         }
-        return provider;
     } else {
         alert('Solana wallet not found. Please install Phantom or Solflare wallet.');
         window.open("https://phantom.app/", "_blank");
-        const provider = null;
+        return null;
     }
-    return provider;
 }
 
 
@@ -364,7 +324,7 @@ async function disconnectWallet() {
 //     }
 // }
 
-async function transform(transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase) {
+async function transform(transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase, pickle, pickle_data) {
     // const pckl = document.querySelector("#transformer-pickle > label > div.input-container > textarea").value;
     const transformer = document.querySelector("#transformer-address > label > div > textarea").value;
     // if (pckl) {
@@ -426,7 +386,8 @@ async function transform(transformer_energy, transformer_address, hf_models, hf_
                 // or update the transformer
                 console.log("Found transformer account");
                 // console.log(transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase);
-                return ["", {}]
+                // console.log(pickle, pickle_data);
+                return [transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase, pickle, pickle_data]
                 // const accounts = [
                 //     { pubkey: publicKey, isSigner: true, isWritable: true },
                 //     { pubkey: mint, isSigner: false, isWritable: true },
@@ -465,7 +426,8 @@ async function transform(transformer_energy, transformer_address, hf_models, hf_
             // }
             const signature = provider.signAndSendTransaction(transaction, { skipPreflight: false }) //.then((signature) => {
             console.log(`Transform: Transaction sent with signature: ${JSON.stringify(signature)}`);
-            return ["", {}]
+            // console.log(pickle, pickle_data);
+            return [transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase, pickle, pickle_data]
             // }).catch((error) => {
             //     console.error("Error sending transaction: ", error);
             //     alert("Error sending transaction: ", error);
@@ -478,10 +440,12 @@ async function transform(transformer_energy, transformer_address, hf_models, hf_
             // });
         } catch (err) {
             console.error(err);
-            return ["", {}]
+            // console.log(pickle, pickle_data);
+            return [transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase, pickle, pickle_data]
         }
     }
-    return ["", {}]
+    // console.log(pickle, pickle_data);
+    return [transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase, pickle, pickle_data]
     // });
         // }
     // }
