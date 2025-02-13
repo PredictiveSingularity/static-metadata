@@ -339,149 +339,151 @@ async function disconnectWallet() {
 
 // Update pickle
 
-function monitorPickle() {
-    let previousValue = "";
+// function monitorPickle() {
+//     let previousValue = "";
 
-    setInterval(() => {
-        let textbox = document.querySelector("#transformer-pickle > label > div.input-container > textarea");
-        if (textbox) {
-            let currentValue = textbox.value;
-            if (currentValue !== previousValue) {
-                previousValue = currentValue;
-                console.log("Pickle detected :", currentValue);
-                onPickleChange(currentValue);
+//     setInterval(() => {
+//         let textbox = document.querySelector("#transformer-pickle > label > div.input-container > textarea");
+//         if (textbox) {
+//             let currentValue = textbox.value;
+//             if (currentValue !== previousValue) {
+//                 previousValue = currentValue;
+//                 console.log("Pickle detected :", currentValue);
+//                 onPickleChange(currentValue);
+//             }
+//         }
+//     }, 500); // Vérifie toutes les 500ms
+// }
+
+// function onPickleChange(newValue) {
+//     if (newValue === '789c6b60a99da20700056201c4') {
+//         console.log("Pickle set to {}");
+//     } else {
+//         // alert("New pickle detected. Please press ok, then confirm the transaction to save your changes.");
+//         transform();
+//     }
+// }
+
+function transform(transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase) {
+    // const pckl = document.querySelector("#transformer-pickle > label > div.input-container > textarea").value;
+    const transformer = document.querySelector("#transformer-address > label > div > textarea").value;
+    // if (pckl) {
+    //     if (pckl === '789c6b60a99da20700056201c4') {
+    //         console.log("Pickle is empty.");
+    //     } else {
+            // Check if transformer is initialized
+    const transformerPublicKey = new solanaWeb3.PublicKey(transformer);
+    const networkDropdown = document.querySelector("#network > div.container > div > div.wrap-inner > div > input");
+    const network = networkDropdown.value;
+    const connection = new solanaWeb3.Connection(network, 'confirmed');
+    console.log("Connectcting to network: ", network);
+    return connection.getParsedAccountInfo(transformerPublicKey).then(async (accountInfo) => {
+        console.log("Got transformer info.");
+        const systemProgramId = solanaWeb3.SystemProgram.programId;
+        const rentSysvarId = solanaWeb3.SYSVAR_RENT_PUBKEY;
+        const programId = new solanaWeb3.PublicKey(document.querySelector("#contract-address > label > div > textarea").value);
+        const energyMint = document.querySelector("#energy-mint > label > div > textarea").value;
+        const mint = new solanaWeb3.PublicKey(energyMint);
+        // Convertir la chaîne pckl en octets
+        // const encoder = new TextEncoder();
+        // const pcklBytes = encoder.encode(pckl);
+        // const pcklBytes = encoder.encode('789c6b60a99da20700056201c4');
+        console.log("Accessing provider...");
+        provider = getProvider();
+        if (provider) {
+            console.log("Found provider.");
+            try {
+                console.log("Connecting to wallet...");
+                const resp = await provider.connect();
+                const publicKey = resp.publicKey  || provider.publicKey;
+                const transaction = new solanaWeb3.Transaction({
+                    feePayer: publicKey,
+                });
+                if (!accountInfo || !accountInfo.value) {
+                    // initialize the transformer
+                    console.log("Opening your transformer account...");
+                    const accounts = [
+                        { pubkey: publicKey, isSigner: true, isWritable: true },
+                        { pubkey: mint, isSigner: false, isWritable: true },
+                        { pubkey: transformerPublicKey, isSigner: false, isWritable: true },
+                        { pubkey: rentSysvarId, isSigner: false, isWritable: false },
+                        { pubkey: systemProgramId, isSigner: false, isWritable: false },
+                    ];
+                    // Compute the 8-byte discriminator for "transform"
+                    const transformDiscriminator = await computeInstructionDiscriminator("transform");
+                    console.log("8-byte instruction discriminator:", transformDiscriminator);
+                    // const transformData = new Uint8Array(2);
+                    // // Encoder les données dans le tableau d'octets
+                    // transformData[0] = transformDiscriminator;
+                    // transformData[1] = pcklBytes;
+                    transformData = transformDiscriminator // new Uint8Array([...transformDiscriminator, ...pcklBytes]);
+                    instruction = new solanaWeb3.TransactionInstruction({
+                        keys: accounts,
+                        programId,
+                        data: transformData,
+                    });
+                } else {
+                    // or update the transformer
+                    console.log("Found transformer account");
+                    // console.log(transformer_energy, transformer_address, hf_models, hf_key, openai_models, openai_key, passphrase);
+                    return "", {}
+                    // const accounts = [
+                    //     { pubkey: publicKey, isSigner: true, isWritable: true },
+                    //     { pubkey: mint, isSigner: false, isWritable: true },
+                    //     { pubkey: transformerPublicKey, isSigner: false, isWritable: true },
+                    //     { pubkey: rentSysvarId, isSigner: false, isWritable: false },
+                    //     { pubkey: systemProgramId, isSigner: false, isWritable: false },
+                    // ];
+                    // // Compute the 8-byte discriminator for "improveTransform"
+                    // const updateTransformDiscriminator = await computeInstructionDiscriminator("improveTransform");
+                    // console.log("8-byte instruction discriminator:", updateTransformDiscriminator);
+                    // // const transformData = new Uint8Array(2);
+                    // // Encoder les données dans le tableau d'octets
+                    // // transformData[0] = updateTransformDiscriminator;
+                    // // transformData[1] = pcklBytes;
+                    // transformData = new Uint8Array([...updateTransformDiscriminator, ...pcklBytes]);
+                    // instruction = new solanaWeb3.TransactionInstruction({
+                    //     keys: accounts,
+                    //     programId,
+                    //     data: transformData,
+                    // });
+                }
+                // Ajouter l'instruction à la transaction
+                transaction.add(instruction);
+                return connection.getLatestBlockhash().then((latest) => {
+                    console.log("Latest blockhash: ", latest);
+                    transaction.recentBlockhash = latest.blockhash;
+                    transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
+                    transaction.feePayer = provider.publicKey;
+                    // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
+                    // transaction.programId = programId;
+                    console.log("Transaction: ", transaction);
+                    // if (!transaction.feePayer || !transaction.recentBlockhash || !transaction.lastValidBlockHeight) {
+                    //     console.error("Transaction properties are missing");
+                    //     alert("Transaction properties are missing");
+                    //     return;
+                    // }
+                    return provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
+                        console.log(`Transform: Transaction sent with signature: ${JSON.stringify(signature)}`);
+                        return "", {}
+                    }).catch((error) => {
+                        console.error("Error sending transaction: ", error);
+                        alert("Error sending transaction: ", error);
+                    });
+                }).catch((error) => {
+                    console.error("Error getting latest blockhash: ", error);
+                    alert("Error getting latest blockhash: ", error);
+                });
+            } catch (err) {
+                console.error(err);
             }
         }
-    }, 500); // Vérifie toutes les 500ms
+    });
+        // }
+    // }
 }
 
-function onPickleChange(newValue) {
-    if (newValue === '789c6b60a99da20700056201c4') {
-        console.log("Pickle set to {}");
-    } else {
-        // alert("New pickle detected. Please press ok, then confirm the transaction to save your changes.");
-        transform();
-    }
-}
-
-function transform() {
-    const pckl = document.querySelector("#transformer-pickle > label > div.input-container > textarea").value;
-    const transformer = document.querySelector("#transformer-address > label > div > textarea").value;
-    if (pckl) {
-        if (pckl === '789c6b60a99da20700056201c4') {
-            console.log("Pickle is empty.");
-        } else {
-            // Check if transformer is initialized
-            const transformerPublicKey = new solanaWeb3.PublicKey(transformer);
-            const networkDropdown = document.querySelector("#network > div.container > div > div.wrap-inner > div > input");
-            const network = networkDropdown.value;
-            const connection = new solanaWeb3.Connection(network, 'confirmed');
-            console.log("Connectcting to network: ", network);
-            connection.getParsedAccountInfo(transformerPublicKey).then(async (accountInfo) => {
-                console.log("Got transformer info.");
-                const systemProgramId = solanaWeb3.SystemProgram.programId;
-                const rentSysvarId = solanaWeb3.SYSVAR_RENT_PUBKEY;
-                const programId = new solanaWeb3.PublicKey(document.querySelector("#contract-address > label > div > textarea").value);
-                const energyMint = document.querySelector("#energy-mint > label > div > textarea").value;
-                const mint = new solanaWeb3.PublicKey(energyMint);
-                // Convertir la chaîne pckl en octets
-                const encoder = new TextEncoder();
-                // const pcklBytes = encoder.encode(pckl);
-                const pcklBytes = encoder.encode('789c6b60a99da20700056201c4');
-                console.log("Accessing provider...");
-                provider = getProvider();
-                if (provider) {
-                    console.log("Found provider.");
-                    try {
-                        console.log("Connecting to wallet...");
-                        const resp = await provider.connect();
-                        const publicKey = resp.publicKey  || provider.publicKey;
-                        const transaction = new solanaWeb3.Transaction({
-                            feePayer: publicKey,
-                        });
-                        if (!accountInfo || !accountInfo.value) {
-                            // initialize the transformer
-                            console.log("Opening your transformer account...");
-                            const accounts = [
-                                { pubkey: publicKey, isSigner: true, isWritable: true },
-                                { pubkey: mint, isSigner: false, isWritable: true },
-                                { pubkey: transformerPublicKey, isSigner: false, isWritable: true },
-                                { pubkey: rentSysvarId, isSigner: false, isWritable: false },
-                                { pubkey: systemProgramId, isSigner: false, isWritable: false },
-                            ];
-                            // Compute the 8-byte discriminator for "transform"
-                            const transformDiscriminator = await computeInstructionDiscriminator("transform");
-                            console.log("8-byte instruction discriminator:", transformDiscriminator);
-                            // const transformData = new Uint8Array(2);
-                            // // Encoder les données dans le tableau d'octets
-                            // transformData[0] = transformDiscriminator;
-                            // transformData[1] = pcklBytes;
-                            transformData = new Uint8Array([...transformDiscriminator, ...pcklBytes]);
-                            instruction = new solanaWeb3.TransactionInstruction({
-                                keys: accounts,
-                                programId,
-                                data: transformData,
-                            });
-                        } else {
-                            // or update the transformer
-                            console.log("Updating transformer account...");
-                            return;
-                            // const accounts = [
-                            //     { pubkey: publicKey, isSigner: true, isWritable: true },
-                            //     { pubkey: mint, isSigner: false, isWritable: true },
-                            //     { pubkey: transformerPublicKey, isSigner: false, isWritable: true },
-                            //     { pubkey: rentSysvarId, isSigner: false, isWritable: false },
-                            //     { pubkey: systemProgramId, isSigner: false, isWritable: false },
-                            // ];
-                            // // Compute the 8-byte discriminator for "improveTransform"
-                            // const updateTransformDiscriminator = await computeInstructionDiscriminator("improveTransform");
-                            // console.log("8-byte instruction discriminator:", updateTransformDiscriminator);
-                            // // const transformData = new Uint8Array(2);
-                            // // Encoder les données dans le tableau d'octets
-                            // // transformData[0] = updateTransformDiscriminator;
-                            // // transformData[1] = pcklBytes;
-                            // transformData = new Uint8Array([...updateTransformDiscriminator, ...pcklBytes]);
-                            // instruction = new solanaWeb3.TransactionInstruction({
-                            //     keys: accounts,
-                            //     programId,
-                            //     data: transformData,
-                            // });
-                        }
-                        // Ajouter l'instruction à la transaction
-                        transaction.add(instruction);
-                        connection.getLatestBlockhash().then((latest) => {
-                            console.log("Latest blockhash: ", latest);
-                            transaction.recentBlockhash = latest.blockhash;
-                            transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
-                            transaction.feePayer = provider.publicKey;
-                            // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
-                            // transaction.programId = programId;
-                            console.log("Transaction: ", transaction);
-                            // if (!transaction.feePayer || !transaction.recentBlockhash || !transaction.lastValidBlockHeight) {
-                            //     console.error("Transaction properties are missing");
-                            //     alert("Transaction properties are missing");
-                            //     return;
-                            // }
-                            provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
-                                console.log(`Transform: Transaction sent with signature: ${JSON.stringify(signature)}`);
-                            }).catch((error) => {
-                                console.error("Error sending transaction: ", error);
-                                alert("Error sending transaction: ", error);
-                            });
-                        }).catch((error) => {
-                            console.error("Error getting latest blockhash: ", error);
-                            alert("Error getting latest blockhash: ", error);
-                        });
-                    } catch (err) {
-                        console.error(err);
-                    }
-                }
-            });
-        }
-    }
-}
-
-monitorPickle();
+// monitorPickle();
 
 function encodeU64(value) {
     const buffer = new ArrayBuffer(8);
