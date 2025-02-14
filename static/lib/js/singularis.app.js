@@ -648,7 +648,7 @@ function sendMessage() {
             console.error("Please enter a message to send.");
             return;
         // } else if (message.startsWith('/') || message.startsWith('>') || message.startsWith('@') || message.startsWith('#') || message.startsWith('%') || message.startsWith('?') || message.startsWith('!')) {
-        } else if (message === '/help') {
+        } else if (message.startsWith('/help') || message.startsWith('/welcome'))  {
             console.log("Special command detected: ", message);
             return;
         } else {
