@@ -647,9 +647,10 @@ function sendMessage() {
         if (message === '') {
             console.error("Please enter a message to send.");
             return;
-        } else if (message.startsWith('/') || message.startsWith('>') || message.startsWith('@') || message.startsWith('#') || message.startsWith('%') || message.startsWith('?') || message.startsWith('!')) {
+        // } else if (message.startsWith('/') || message.startsWith('>') || message.startsWith('@') || message.startsWith('#') || message.startsWith('%') || message.startsWith('?') || message.startsWith('!')) {
+        } else if (message === '/help') {
             console.log("Special command detected: ", message);
-            return
+            return;
         } else {
             console.log("Message: ", message);
             const energy_addres = document.querySelector("#energy-address > label > div > textarea").value;

@@ -35,9 +35,9 @@ If you need help or have questions, you can click on the "[About](https://singul
 To get started, you can try out some example queries by clicking on the following links:
 
 * `/welcome`: This will provide you with a this brief introduction to our platform and how to get started.
-* `/explain energy`: This will give you a detailed explanation of what energy is and how it works.
-* `/explain energy buy`: This will provide you with information on how to transfer energy between accounts.
-* `/explain energy earn`: This will give you an overview of how you can earn energy by computing for it.
+* `/help energy`: This will give you a detailed explanation of what energy is and how it works.
+* `/help buy energy`: This will provide you with information on how to transfer energy between accounts.
+* `/explain earn energy`: This will give you an overview of how you can earn energy by computing for it.
 
 Remember to always provision your Energy account with enough energy before sending a message. If you have any questions or need help, don't hesitate to reach out.
 

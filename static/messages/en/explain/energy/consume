@@ -20,6 +20,7 @@ At the end of the process, the rest of the ⚡ energy in provision that was not 
 <summary>When you connect your wallet for the first time, we'll ask you to create an account to hold ⚡ energy.</summary>
 
 ```python
+# Initialize a Token Account
 @instruction
 def welcome(
   signer: Signer,
@@ -66,10 +67,11 @@ def provision(
 <summary>First message you send, we will ask you to open a Metabolizer account to proceed with provisioning.</summary>
 
 ```python
+# Initialize a Costumer
 @instruction
 def metabolize(
-  signer: Signer,
-  metabolizer: Empty[Metabolizer],
+    signer: Signer,
+    metabolizer: Empty[Metabolizer],
   ):
   metabolizer = metabolizer.init(
     payer = signer,
@@ -107,7 +109,10 @@ def consume(
   assert transformer_account.mint() == mint.key(), 'The Token account you are trying to consume does not match the transformer\'s mint'
   assert metabolizer_account.mint() == mint.key(), 'The Token account you are trying to consume does not match the metabolizer\'s mint'
   assert singularity_account.mint() == mint.key(), 'The Token account you are trying to consume does not match the singularity\'s mint'
-    
+  
+  # assert transformer.owner == transformer_account.owner, 'The Transformer account you are trying to consume from does not match the transformer\'s owner'
+  # assert metabolizer.owner == metabolizer_account.owner, 'The Metabolizer account you are trying to consume from does not match the metabolizer\'s owner'
+  
   assert n > 0, 'You must consume at least 1 unit of energy provision.'
   assert metabolizer.reserve >= n, 'The Metabolizer account does not have enough energy provision to consume.'
   assert singularity.energy_supply >= n, 'The Singularity account does not have enough energy supply to consume.'
@@ -133,6 +138,7 @@ def consume(
     authority = signer,
     to = transformer_account,
     amount = amount,
+    # signer = ['energy-conversion', mint, transformer_account, timestamp]
   )
   
   # Profit from the metabolizer
@@ -143,11 +149,13 @@ def consume(
       authority = signer,
       to = metabolizer_account,
       amount = rem,
+      # signer = ['energy-conversion', mint, metabolizer_account, timestamp]
   )
   
   # Close the transaction
   metabolizer.reserve = 0
   metabolizer.last_exchange = timestamp
+
 ```
 
 </details>
