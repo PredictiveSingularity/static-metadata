@@ -9,7 +9,7 @@ const { SystemProgram } = web3;
 const programID = new PublicKey("your_program_id");
 const tokenProgramID = new PublicKey("your_token_program_id");
 const mint = new PublicKey("your_mint_id");
-const network = clusterApiUrl("devnet");
+const network = clusterApiUrl("mainnet-beta");
 const opts = {
     preflightCommitment: "processed" as Commitment
 };
