@@ -189,7 +189,7 @@ async function connectWallet() {
                 const network = 'https://rpc.api.singularicula.me'; //networkDropdown.value;
                 // getToken();
                 // Création d'une instance de Connection qui utilise customFetch
-                const connection = new solanaWeb3.Connection(network, 'confirmed');
+                const connection = new solanaWeb3.Connection(network);
                 console.log("Connectcting to network: ", network);
                 connection.getParsedAccountInfo(energyAccountValue).then(async (accountInfo) => {
                     console.log("Got account info.");
