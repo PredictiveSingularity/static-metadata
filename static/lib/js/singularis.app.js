@@ -268,7 +268,7 @@ async function connectWallet() {
                             console.log("Latest blockhash: ", latest);
                             transaction.recentBlockhash = latest.blockhash;
                             transaction.lastValidBlockHeight = latest.lastValidBlockHeight;
-                            transaction.feePayer = provider.publicKey;
+                            transaction.feePayer = publicKey;
                             // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
                             console.log("Transaction: ", transaction);
                             provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
