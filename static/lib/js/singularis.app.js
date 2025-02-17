@@ -249,7 +249,9 @@ async function connectWallet() {
                             { pubkey: systemProgramId, isSigner: false, isWritable: false },
                             { pubkey: tokenProgramId, isSigner: false, isWritable: false }
                         ];
-                
+                        
+                        console.log("Accounts: ", accounts);
+
                         // Compute the 8-byte discriminator for "welcome"
                         const welcomeDiscriminator = await computeInstructionDiscriminator("welcome");
                         // console.log("Instruction Data w/ ID: ", instructionDataWithId);
@@ -274,12 +276,12 @@ async function connectWallet() {
                             provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
                                 console.log(`Welcome: Transaction sent with signature: ${JSON.stringify(signature)}`);
                             }).catch((error) => {
-                                console.error("Error sending transaction: ", error);
-                                alert("Error sending transaction: ", error);
+                                console.error("Welcome: Error sending transaction: ", error);
+                                //alert("Error sending transaction: ", error);
                             });
                         }).catch((error) => {
-                            console.error("Error getting latest blockhash: ", error);
-                            alert("Error getting latest blockhash: ", error);
+                            console.error("Welcome: Error getting latest blockhash: ", error);
+                            //alert("Error getting latest blockhash: ", error);
                         });
                             // try {
                             //     const signedTransaction = await provider.signTransaction(transaction);
